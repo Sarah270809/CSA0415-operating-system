@@ -1,0 +1,66 @@
+
+#include <stdio.h>
+
+int main(void) {
+    int n, i, j;
+    int at[20], bt[20], p[20], ct[20], tat[20], wt[20];
+    int done[20] = {0};
+    int time = 0, completed = 0, idx;
+    float total_wt = 0, total_tat = 0;
+
+    printf("Enter number of processes (1-20): ");
+    scanf("%d", &n);
+
+    if (n < 1 || n > 20) {
+        printf("Invalid number of processes.\n");
+        return 1;
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("Enter arrival time, burst time and priority for P%d: ", i + 1);
+        scanf("%d %d %d", &at[i], &bt[i], &p[i]);
+
+        if (at[i] < 0 || bt[i] <= 0 || p[i] < 0) {
+            printf("Invalid input.\n");
+            return 1;
+        }
+    }
+
+    while (completed < n) {
+        idx = -1;
+
+        for (i = 0; i < n; i++) {
+            if (!done[i] && at[i] <= time) {
+                if (idx == -1 || p[i] < p[idx] ||
+                    (p[i] == p[idx] && at[i] < at[idx])) {
+                    idx = i;
+                }
+            }
+        }
+
+        if (idx == -1) {
+            time++;
+            continue;
+        }
+
+        time += bt[idx];
+        ct[idx] = time;
+        tat[idx] = ct[idx] - at[idx];
+        wt[idx] = tat[idx] - bt[idx];
+        total_wt += wt[idx];
+        total_tat += tat[idx];
+        done[idx] = 1;
+        completed++;
+    }
+
+    printf("\nProcess\tAT\tBT\tPriority\tCT\tTAT\tWT\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t\t%d\t%d\t%d\n",
+               i + 1, at[i], bt[i], p[i], ct[i], tat[i], wt[i]);
+    }
+
+    printf("Average Waiting Time = %.2f\n", total_wt / n);
+    printf("Average Turnaround Time = %.2f\n", total_tat / n);
+
+    return 0;
+}
