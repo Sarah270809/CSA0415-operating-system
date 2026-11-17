@@ -1,0 +1,40 @@
+
+#include <stdio.h>
+
+int main()
+{
+    int blocks[50], n, i, record;
+
+    printf("Enter number of blocks: ");
+    scanf("%d", &n);
+
+    printf("Enter block numbers:\n");
+    for (i = 0; i < n; i++)
+        scanf("%d", &blocks[i]);
+
+    printf("Linked allocation:\n");
+
+    for (i = 0; i < n - 1; i++)
+        printf("%d -> ", blocks[i]);
+
+    printf("%d -> NULL\n", blocks[n - 1]);
+
+    printf("Enter record position to access: ");
+    scanf("%d", &record);
+
+    if (record < 1 || record > n)
+    {
+        printf("Invalid record position\n");
+        return 0;
+    }
+
+    printf("Traversing linked blocks: ");
+
+    for (i = 0; i < record; i++)
+        printf("%d ", blocks[i]);
+
+    printf("\nRecord found in block %d\n",
+           blocks[record - 1]);
+
+    return 0;
+}
